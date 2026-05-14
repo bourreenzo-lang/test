@@ -1,0 +1,135 @@
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BASE ===== */
+body {
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    background: #f9f9f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+}
+
+/* ===== BARRE DE NAVIGATION ===== */
+.topnav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 16px 24px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Georgia', serif;
+    font-size: 0.88rem;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn:hover {
+    background: #1a1a1a;
+    color: white;
+}
+
+.nav-btn-danger {
+    border-color: #9b2c2c;
+    color: #9b2c2c;
+}
+
+.nav-btn-danger:hover {
+    background: #9b2c2c;
+    color: white;
+}
+
+/* ===== TITRE ===== */
+h1 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #1a1a1a;
+}
+
+/* ===== CARTE INFO ===== */
+.text {
+    background: white;
+    border: 1px solid #e0e0de;
+    border-radius: 6px;
+    padding: 20px 28px;
+    width: 320px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.text p {
+    color: #555;
+    font-size: 0.93rem;
+    line-height: 1.6;
+}
+
+/* ===== FORMULAIRE ===== */
+form {
+    background: white;
+    border: 1px solid #e0e0de;
+    border-radius: 6px;
+    padding: 24px 28px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ===== BOUTONS CASIERS ===== */
+.btn-casierA,
+.btn-casierB {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-casierA:hover,
+.btn-casierB:hover {
+    background: #1a1a1a;
+    color: white;
+}
+
+/* ===== LIENS SITES ===== */
+.form-sites {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 320px;
+}
+
+.form-sites a {
+    text-decoration: none;
+    width: 100%;
+}
+
+.form-sites button {
+    width: 100%;
+}

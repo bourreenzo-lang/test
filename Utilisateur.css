@@ -1,0 +1,54 @@
+.body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: blue;
+    text-align: center;
+}
+
+.text {
+    text-align: center;
+    
+}
+
+.btn-casierA {
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  .btn-casierA:hover {
+    background-color: #357abd;
+}
+
+.btn-casierB {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  .btn-casierB:hover {
+    background-color: #357abd;
+  }
+  

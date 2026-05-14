@@ -1,0 +1,127 @@
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BASE ===== */
+body.page-index {
+    min-height: 100vh;
+    font-family: 'Georgia', serif;
+    background: #f9f9f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+}
+
+/* ===== TITRE ===== */
+.page-index h1 {
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: #1a1a1a;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* ===== FORMULAIRE ===== */
+.page-index .formulaire {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 280px;
+}
+
+.page-index .formulaire a {
+    text-decoration: none;
+    width: 100%;
+}
+
+.page-index button {
+    width: 100%;
+    padding: 13px 0;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.page-index button:hover {
+    background: #1a1a1a;
+    color: white;
+}
+
+/* ===== MESSAGES ===== */
+.page-index .message {
+    width: 280px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    text-align: center;
+}
+
+.page-index .succes {
+    background: #f0faf0;
+    color: #2d6a2d;
+    border: 1px solid #b7d9b7;
+}
+
+.page-index .erreur {
+    background: #fff5f5;
+    color: #9b2c2c;
+    border: 1px solid #f5c6c6;
+}
+
+/* ===== THEME SWITCH ===== */
+.theme-switch {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+}
+
+.theme-switch select {
+    padding: 7px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    color: #1a1a1a;
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+}
+
+/* ===== MODE SOMBRE (minimal) ===== */
+.page-index.dark {
+    background: #111;
+    color: #f0f0f0;
+}
+
+.page-index.dark h1 {
+    color: #f0f0f0;
+}
+
+.page-index.dark button {
+    background: #111;
+    color: #f0f0f0;
+    border-color: #f0f0f0;
+}
+
+.page-index.dark button:hover {
+    background: #f0f0f0;
+    color: #111;
+}
+
+.page-index.dark .theme-switch select {
+    background: #111;
+    color: #f0f0f0;
+    border-color: #555;
+}
