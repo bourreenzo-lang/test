@@ -1,6 +1,0 @@
-connecter terminal Pc:
-pip install pyserial requests
-
-Dans terminal visual :
-python bridge_badge.py
-
