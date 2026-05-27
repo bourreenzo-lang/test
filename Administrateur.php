@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== true) {
+    header('Location: connexion.php');
+    exit();
+}
+require_once 'connbdd.php';
+date_default_timezone_set('Europe/Paris');
+$username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') : 'Utilisateur';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,10 +18,6 @@
 </head>
 <body>
     <?php
-    require_once 'connbdd.php';
-    session_start();
-    date_default_timezone_set('Europe/Paris');
-    $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') : 'Utilisateur';
 
     // Traitement du changement de rôle
     $role_msg = '';
@@ -49,10 +55,8 @@
             </div>
         </div>
     </header>
-
     <main class="container">
-
-        <!-- ===== CARDS ===== -->
+        <!-- différente fonctions -->
         <section class="dashboard-cards">
             <article class="card">
                 <h2>Utilisateurs</h2>
@@ -76,8 +80,7 @@
                 </div>
             </article>
         </section>
-
-        <!--  LISTE UTILISATEURS ===== -->
+        <!--liste utilisateurs-->
         <section class="historique" id="liste-utilisateurs">
             <h2>Liste des utilisateurs</h2>
             <p>Voici les comptes enregistrés sur le site :</p>

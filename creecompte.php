@@ -1,6 +1,49 @@
-<?php session_start(); ?>
+<?php
+session_start();
+
+$message = '';
+$message_type = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name     = isset($_POST['name'])     ? trim($_POST['name'])     : '';
+    $email    = isset($_POST['email'])    ? trim($_POST['email'])    : '';
+    $password = isset($_POST['password']) ? $_POST['password']       : '';
+
+    if ($name === '' || $email === '' || $password === '') {
+        $message      = 'Tous les champs sont requis.';
+        $message_type = 'erreur';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message      = 'Adresse e-mail invalide.';
+        $message_type = 'erreur';
+    } elseif (strlen($password) < 6) {
+        $message      = 'Le mot de passe doit contenir au moins 6 caractères.';
+        $message_type = 'erreur';
+    } else {
+        require_once 'connbdd.php';
+        $hashed = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("INSERT INTO users (nom, email, password) VALUES (:name, :email, :password)");
+        $stmt->bindParam(':name',     $name);
+        $stmt->bindParam(':email',    $email);
+        $stmt->bindParam(':password', $hashed);
+
+        try {
+            $stmt->execute();
+            $_SESSION['message'] = 'Compte créé avec succès. Vous pouvez vous connecter.';
+            header('Location: connexion.php');
+            exit();
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $message = 'Ce nom d\'utilisateur ou cet e-mail est déjà utilisé.';
+            } else {
+                $message = 'Erreur lors de la création du compte.';
+            }
+            $message_type = 'erreur';
+        }
+    }
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,51 +51,29 @@
     <link rel="stylesheet" href="creecompte.css">
 </head>
 <body>
-    <h1>Crée un compte</h1>
-    <!-- Formulaire de création de compte -->
+
+    <nav class="topnav">
+        <a href="index.php" class="nav-btn">Accueil</a>
+    </nav>
+
+    <h1>Créer un compte</h1>
+
+    <?php if ($message): ?>
+        <p class="<?php echo $message_type; ?>-msg">
+            <?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?>
+        </p>
+    <?php endif; ?>
 
     <form method="POST" action="creecompte.php">
-    <div class="formulaire">
-        <input type="text" name="name" placeholder="Name" id="name">
-        <input type="email" name="email" placeholder="Email" id="email">
-        <input type="password" name="password" placeholder="Password" id="password">
-        
-        <input href="Utilisateur.php" type="submit" value="Login">
-    </div>
-    
+        <div class="formulaire">
+            <input type="text"     name="name"     placeholder="Nom d'utilisateur" id="name"
+                value="<?php echo isset($_POST['name'])  ? htmlspecialchars($_POST['name'],  ENT_QUOTES, 'UTF-8') : ''; ?>">
+            <input type="email"    name="email"    placeholder="Email" id="email"
+                value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8') : ''; ?>">
+            <input type="password" name="password" placeholder="Mot de passe (6 caractères min.)" id="password">
+            <input type="submit" value="Créer le compte" class="btn-primary">
+        </div>
+    </form>
+
 </body>
 </html>
-
-<?php 
-include 'connbdd.php';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    
-    // Vérifie que les champs ne sont pas vides
-    if (!empty($_POST["name"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
-
-        // Récupère les données du formulaire
-        $name = $_POST["name"];
-        $email = $_POST["email"];
-        $password = password_hash($_POST["password"], PASSWORD_DEFAULT); 
-
-        // Prépare la requête d'insertion
-        $stmt = $pdo->prepare("INSERT INTO users (nom, email, password) VALUES (:name, :email, :password)");
-        
-        // Lie les paramètres à la requête préparée
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
-
-        // Exécute la requête et gère les erreurs
-        try {
-            $stmt->execute();
-            echo "Utilisateur créé avec succès.";
-            // Redirige vers la page de connexion après la création du compte
-            header("Location: connexion.php");
-        } catch (PDOException $e) {
-            echo "Erreur lors de la création de l'utilisateur: " . $e->getMessage();
-        }
-    }
-}
-?>

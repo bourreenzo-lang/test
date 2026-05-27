@@ -1,7 +1,8 @@
 <?php
 
 function log_connection($pdo, $user_id, $user_name) {
-    $timestamp = date('Y-m-d H:i:s');
+    $dateTime = new DateTime('now', new DateTimeZone('Europe/Paris'));
+    $timestamp = $dateTime->format('Y-m-d H:i:s');
     try {
         $log_stmt = $pdo->prepare('INSERT INTO logs (user_id, user_name, timestamp) VALUES (:user_id, :user_name, :timestamp)');
         $log_stmt->bindParam(':user_id', $user_id);
@@ -14,7 +15,8 @@ function log_connection($pdo, $user_id, $user_name) {
 }
 
 function date_heure_actuelle() {
-    return date('Y-m-d H:i:s');
+    $dateTime = new DateTime('now', new DateTimeZone('Europe/Paris'));
+    return $dateTime->format('Y-m-d H:i:s');
 }
 
 
