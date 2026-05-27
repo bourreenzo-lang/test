@@ -1,17 +1,14 @@
 <?php
 session_start();
 require_once 'connbdd.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($_POST['name']) ? trim($_POST['name']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
-
     if ($name === '' || $password === '') {
         $_SESSION['erreur'] = 'Tous les champs sont requis.';
         header('Location: connexion.php');
         exit();
     }
-
     try {
         $stmt = $pdo->prepare('SELECT * FROM users WHERE nom = :name');
         $stmt->bindParam(':name', $name);
@@ -21,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id']   = $user['id'];
             $_SESSION['user_name'] = $user['nom'];
-
             // Enregistrement du log de connexion
             try {
                 $log_stmt = $pdo->prepare('INSERT INTO logs (user_id, user_name, timestamp) VALUES (:user_id, :user_name, :timestamp)');
@@ -33,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (PDOException $e) {
                 // silence — le log ne doit pas bloquer la connexion
             }
-
             if (isset($user['role']) && $user['role'] == 'admin') {
                 $_SESSION['role'] = true;
                 header('Location: Administrateur.php');
@@ -55,11 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 }
-
 $message = isset($_SESSION['erreur']) ? $_SESSION['erreur'] : (isset($_SESSION['message']) ? $_SESSION['message'] : '');
 unset($_SESSION['erreur'], $_SESSION['message']);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>

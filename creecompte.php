@@ -25,7 +25,6 @@
 
 <?php 
 include 'connbdd.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
@@ -54,8 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             echo "Erreur lors de la création de l'utilisateur: " . $e->getMessage();
         }
-        
-
     }
 }
 ?>

@@ -77,7 +77,7 @@
             </article>
         </section>
 
-        <!-- ===== LISTE UTILISATEURS ===== -->
+        <!--  LISTE UTILISATEURS ===== -->
         <section class="historique" id="liste-utilisateurs">
             <h2>Liste des utilisateurs</h2>
             <p>Voici les comptes enregistrés sur le site :</p>

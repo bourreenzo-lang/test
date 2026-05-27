@@ -11,8 +11,9 @@ try {
     if ($user) {
         $user_id = $user['id'];
         $user_name = $user['nom'];
-        $timezone = new DateTimeZone('UTC'); 
-        $timestamp = date('Y-m-d H:i:s');
+        $timezone = new DateTimeZone('Europe/Paris');
+        $dateTime = new DateTime('now', $timezone);
+        $timestamp = $dateTime->format('Y-m-d H:i:s');
 
         // Insère une nouvelle entrée dans la table logs
         $log_stmt = $pdo->prepare('INSERT INTO logs (user_id, user_name, timestamp) VALUES (:user_id, :user_name, :timestamp)');
