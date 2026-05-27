@@ -15,6 +15,15 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user) {
+    // Enregistrement du passage dans badge_scans
+    $insert = $pdo->prepare(
+        "INSERT INTO badge_scans (badge_uid, user_id, user_name, role)
+         SELECT :badge_uid, id, nom, role FROM users WHERE badge_uid = :badge_uid2"
+    );
+    $insert->bindParam(':badge_uid',  $badge_uid);
+    $insert->bindParam(':badge_uid2', $badge_uid);
+    $insert->execute();
+
     echo "OK;" . $user['nom'];
 } else {
     echo "REFUS";

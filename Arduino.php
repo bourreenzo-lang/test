@@ -15,6 +15,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['casier']) && isset($_
         die("Paramètres invalides.");
     }
 
+    require_once 'connbdd.php';
+
+    // Récupération du badge_uid de l'utilisateur connecté
+    $badge_uid = null;
+    try {
+        $bstmt = $pdo->prepare('SELECT badge_uid FROM users WHERE id = :id');
+        $bstmt->execute([':id' => $_SESSION['user_id']]);
+        $row = $bstmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $badge_uid = $row['badge_uid'];
+        }
+    } catch (PDOException $e) {
+        // non bloquant
+    }
+
+    // Enregistrement dans casier_logs
+    try {
+        $log = $pdo->prepare(
+            'INSERT INTO casier_logs (user_id, user_name, badge_uid, site, casier)
+             VALUES (:user_id, :user_name, :badge_uid, :site, :casier)'
+        );
+        $log->execute([
+            ':user_id'   => $_SESSION['user_id'],
+            ':user_name' => $_SESSION['user_name'],
+            ':badge_uid' => $badge_uid,
+            ':site'      => $site,
+            ':casier'    => (int) $casier,
+        ]);
+    } catch (PDOException $e) {
+        // non bloquant
+    }
+
     $commande = "OUVRIR_SITE" . $site . "_CASIER" . $casier . "\n";
 
     $port = fopen("COM4", "w");

@@ -23,7 +23,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
     $role_msg = '';
     $role_msg_type = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_role'], $_POST['user_id'], $_POST['new_role'])) {
-        $allowed_roles = ['admin', 'user'];
+        $allowed_roles = ['admin', 'user', 'technicien'];
         $new_role = $_POST['new_role'];
         $user_id  = (int) $_POST['user_id'];
         if (in_array($new_role, $allowed_roles, true) && $user_id > 0) {
@@ -70,6 +70,13 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                 <p>Suivi des connexions récentes et sécurité en temps réel.</p>
                 <div class="card-actions">
                     <a href="#historique-logs" class="btn-card">Voir les logs</a>
+                </div>
+            </article>
+            <article class="card">
+                <h2>Casiers</h2>
+                <p>Historique des ouvertures de casiers par badge RFID.</p>
+                <div class="card-actions">
+                    <a href="#historique-casiers" class="btn-card">Voir les ouvertures</a>
                 </div>
             </article>
             <article class="card">
@@ -161,6 +168,58 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
             </div>
         </section>
 
+        <!-- ===== HISTORIQUE CASIERS ===== -->
+        <section class="historique" id="historique-casiers">
+            <h2>Historique des ouvertures de casiers</h2>
+            <p>Toutes les ouvertures enregistrées, de la plus récente à la plus ancienne.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Technicien</th>
+                            <th>Badge UID</th>
+                            <th>Site</th>
+                            <th>Casier</th>
+                            <th>Date &amp; heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    try {
+                        $casier_stmt = $pdo->query(
+                            'SELECT id, user_name, badge_uid, site, casier, opened_at
+                             FROM casier_logs
+                             ORDER BY opened_at DESC
+                             LIMIT 200'
+                        );
+                        $casier_logs = $casier_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        if (empty($casier_logs)) {
+                            echo '<tr><td colspan="6" class="logs-empty">Aucune ouverture enregistrée pour le moment.</td></tr>';
+                        } else {
+                            foreach ($casier_logs as $cl) {
+                                $dt  = new DateTime($cl['opened_at'], new DateTimeZone('Europe/Paris'));
+                                $fmt = $dt->format('d/m/Y à H:i:s');
+                                $uid = $cl['badge_uid'] ?? '—';
+                                echo '<tr>';
+                                echo '<td class="log-id">'  . htmlspecialchars($cl['id'],        ENT_QUOTES, 'UTF-8') . '</td>';
+                                echo '<td class="log-name"><span class="log-badge">' . htmlspecialchars($cl['user_name'], ENT_QUOTES, 'UTF-8') . '</span></td>';
+                                echo '<td class="log-uid">' . htmlspecialchars($uid,              ENT_QUOTES, 'UTF-8') . '</td>';
+                                echo '<td class="log-uid">Site ' . htmlspecialchars($cl['site'],  ENT_QUOTES, 'UTF-8') . '</td>';
+                                echo '<td class="log-uid">Casier ' . (int)$cl['casier'] . '</td>';
+                                echo '<td class="log-time">' . $fmt . '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                    } catch (PDOException $e) {
+                        echo '<tr><td colspan="6" class="error">Erreur : ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . '</td></tr>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <!-- ===== PARAMÈTRES ===== -->
         <section class="historique" id="parametres">
             <h2>Paramètres</h2>
@@ -196,7 +255,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                                 $unom  = htmlspecialchars($u['nom'],   ENT_QUOTES, 'UTF-8');
                                 $umail = htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8');
                                 $urole = htmlspecialchars($u['role'],  ENT_QUOTES, 'UTF-8');
-                                $badge_class = $u['role'] === 'admin' ? 'role-admin' : 'role-user';
+                                $badge_class = $u['role'] === 'admin' ? 'role-admin' : ($u['role'] === 'technicien' ? 'role-technicien' : 'role-user');
                                 echo '<tr>';
                                 echo '<td class="log-id">' . $uid . '</td>';
                                 echo '<td>' . $unom . '</td>';
@@ -207,8 +266,9 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                                 echo '<input type="hidden" name="update_role" value="1">';
                                 echo '<input type="hidden" name="user_id" value="' . $uid . '">';
                                 echo '<select name="new_role" class="role-select">';
-                                echo '<option value="user"'  . ($u['role'] === 'user'  ? ' selected' : '') . '>user</option>';
-                                echo '<option value="admin"' . ($u['role'] === 'admin' ? ' selected' : '') . '>admin</option>';
+                                echo '<option value="user"'        . ($u['role'] === 'user'        ? ' selected' : '') . '>user</option>';
+                                echo '<option value="technicien"' . ($u['role'] === 'technicien' ? ' selected' : '') . '>technicien</option>';
+                                echo '<option value="admin"'      . ($u['role'] === 'admin'      ? ' selected' : '') . '>admin</option>';
                                 echo '</select>';
                                 echo ' <button type="submit" class="btn-role">Appliquer</button>';
                                 echo '</form>';
