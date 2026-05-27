@@ -22,6 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id']   = $user['id'];
             $_SESSION['user_name'] = $user['nom'];
 
+            // Enregistrement du log de connexion
+            try {
+                $log_stmt = $pdo->prepare('INSERT INTO logs (user_id, user_name, timestamp) VALUES (:user_id, :user_name, :timestamp)');
+                $log_stmt->execute([
+                    ':user_id'   => $user['id'],
+                    ':user_name' => $user['nom'],
+                    ':timestamp' => date('Y-m-d H:i:s'),
+                ]);
+            } catch (PDOException $e) {
+                // silence — le log ne doit pas bloquer la connexion
+            }
+
             if (isset($user['role']) && $user['role'] == 'admin') {
                 $_SESSION['role'] = true;
                 header('Location: Administrateur.php');
@@ -46,28 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $message = isset($_SESSION['erreur']) ? $_SESSION['erreur'] : (isset($_SESSION['message']) ? $_SESSION['message'] : '');
 unset($_SESSION['erreur'], $_SESSION['message']);
-
-try {
-    $current_user = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE nom = :name');
-    $stmt->bindParam(':name', $current_user);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user) {
-        $user_id = $user['id'];
-        $user_name = $user['nom'];
-        $timestamp = date('Y-m-d H:i:s');
-
-        $log_stmt = $pdo->prepare('INSERT INTO logs (user_id, user_name, timestamp) VALUES (:user_id, :user_name, :timestamp)');
-        $log_stmt->bindParam(':user_id', $user_id);
-        $log_stmt->bindParam(':user_name', $user_name);
-        $log_stmt->bindParam(':timestamp', $timestamp);
-        $log_stmt->execute();
-    }
-} catch (PDOException $e) {
-    // silence log errors on login page
-}
 ?>
 
 <!DOCTYPE html>
