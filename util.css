@@ -1,11 +1,11 @@
-/* ===== RESET ===== */
+/* reset de base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
+/* body centré verticalement, fond clair */
 body {
     font-family: 'Georgia', serif;
     min-height: 100vh;
@@ -17,7 +17,7 @@ body {
     color: #1a1a1a;
 }
 
-/* ===== BARRE DE NAVIGATION ===== */
+/* nav fixée en haut à droite (retour + déco) */
 .topnav {
     position: fixed;
     top: 0;
@@ -28,6 +28,7 @@ body {
     z-index: 100;
 }
 
+/* boutons de navigation normaux */
 .nav-btn {
     padding: 8px 16px;
     border: 1px solid #1a1a1a;
@@ -46,6 +47,7 @@ body {
     color: white;
 }
 
+/* bouton de déconnexion en rouge */
 .nav-btn-danger {
     border-color: #9b2c2c;
     color: #9b2c2c;
@@ -56,7 +58,7 @@ body {
     color: white;
 }
 
-/* ===== TITRE ===== */
+/* titre principal de la page */
 h1 {
     font-size: 1.8rem;
     font-weight: 400;
@@ -66,7 +68,7 @@ h1 {
     color: #1a1a1a;
 }
 
-/* ===== CARTE INFO ===== */
+/* petite carte d'info texte (ex: "choisissez un casier") */
 .text {
     background: white;
     border: 1px solid #e0e0de;
@@ -83,7 +85,7 @@ h1 {
     line-height: 1.6;
 }
 
-/* ===== FORMULAIRE ===== */
+/* carte blanche autour des boutons de choix */
 form {
     background: white;
     border: 1px solid #e0e0de;
@@ -95,7 +97,7 @@ form {
     gap: 12px;
 }
 
-/* ===== BOUTONS CASIERS ===== */
+/* boutons casier (meme style pour A et B) */
 .btn-casierA,
 .btn-casierB {
     width: 100%;
@@ -111,13 +113,14 @@ form {
     transition: background 0.2s, color 0.2s;
 }
 
+/* hover casier : fond noir texte blanc */
 .btn-casierA:hover,
 .btn-casierB:hover {
     background: #1a1a1a;
     color: white;
 }
 
-/* ===== LIENS SITES ===== */
+/* conteneur des boutons "Site A / Site B" dans Utilisateur.php */
 .form-sites {
     display: flex;
     flex-direction: column;

@@ -1,11 +1,11 @@
-/* ===== RESET ===== */
+/* reset classique, on enlève les marges par défaut du navigateur */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
+/* style de base du body — centré, fond clair, police serif */
 body.page-index {
     min-height: 100vh;
     font-family: 'Georgia', serif;
@@ -17,7 +17,7 @@ body.page-index {
     color: #1a1a1a;
 }
 
-/* ===== TITRE ===== */
+/* le gros titre en haut de la page d'accueil */
 .page-index h1 {
     font-size: 2rem;
     font-weight: 400;
@@ -27,7 +27,7 @@ body.page-index {
     text-align: center;
 }
 
-/* ===== FORMULAIRE ===== */
+/* le bloc qui contient les 2 boutons (co / créer compte) */
 .page-index .formulaire {
     display: flex;
     flex-direction: column;
@@ -35,11 +35,13 @@ body.page-index {
     width: 280px;
 }
 
+/* les liens autour des boutons prennent toute la largeur */
 .page-index .formulaire a {
     text-decoration: none;
     width: 100%;
 }
 
+/* style des boutons : bordure fine, fond blanc, hover inversé */
 .page-index button {
     width: 100%;
     padding: 13px 0;
@@ -54,12 +56,13 @@ body.page-index {
     transition: background 0.2s ease, color 0.2s ease;
 }
 
+/* au survol : fond noir, texte blanc */
 .page-index button:hover {
     background: #1a1a1a;
     color: white;
 }
 
-/* ===== MESSAGES ===== */
+/* petites notifs (succes ou erreur) affichées sous le titre */
 .page-index .message {
     width: 280px;
     padding: 10px 14px;
@@ -69,59 +72,16 @@ body.page-index {
     text-align: center;
 }
 
+/* couleur verte pour les messages ok */
 .page-index .succes {
     background: #f0faf0;
     color: #2d6a2d;
     border: 1px solid #b7d9b7;
 }
 
+/* couleur rouge pour les erruers */
 .page-index .erreur {
     background: #fff5f5;
     color: #9b2c2c;
     border: 1px solid #f5c6c6;
-}
-
-/* ===== THEME SWITCH ===== */
-.theme-switch {
-    position: absolute;
-    top: 20px;
-    right: 24px;
-}
-
-.theme-switch select {
-    padding: 7px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: white;
-    color: #1a1a1a;
-    font-size: 0.85rem;
-    cursor: pointer;
-    outline: none;
-}
-
-/* ===== MODE SOMBRE (minimal) ===== */
-.page-index.dark {
-    background: #111;
-    color: #f0f0f0;
-}
-
-.page-index.dark h1 {
-    color: #f0f0f0;
-}
-
-.page-index.dark button {
-    background: #111;
-    color: #f0f0f0;
-    border-color: #f0f0f0;
-}
-
-.page-index.dark button:hover {
-    background: #f0f0f0;
-    color: #111;
-}
-
-.page-index.dark .theme-switch select {
-    background: #111;
-    color: #f0f0f0;
-    border-color: #555;
 }

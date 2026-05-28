@@ -1,11 +1,12 @@
 <?php
 session_start();
+// vérif que l'user est co ET qu'il est bien admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== true) {
     header('Location: connexion.php');
     exit();
 }
 require_once 'connbdd.php';
-date_default_timezone_set('Europe/Paris');
+date_default_timezone_set('Europe/Paris'); // fuseau horaire France
 $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name'], ENT_QUOTES, 'UTF-8') : 'Utilisateur';
 ?>
 <!DOCTYPE html>
@@ -18,14 +19,14 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
 </head>
 <body>
     <?php
-
-    // Traitement du changement de rôle
-    $role_msg = '';
+    // traitement du changement de rôle soumis via le form "Paramètres"
+    $role_msg      = '';
     $role_msg_type = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_role'], $_POST['user_id'], $_POST['new_role'])) {
-        $allowed_roles = ['admin', 'user', 'technicien'];
+        $allowed_roles = ['admin', 'user', 'technicien']; // rôles autorisés
         $new_role = $_POST['new_role'];
         $user_id  = (int) $_POST['user_id'];
+        // on vérifie que le rôle choisi est valide et que l'id est positif
         if (in_array($new_role, $allowed_roles, true) && $user_id > 0) {
             try {
                 $upd = $pdo->prepare('UPDATE users SET role = :role WHERE id = :id');
@@ -37,12 +38,14 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                 $role_msg_type = 'error';
             }
         } else {
+            // données POST invalides ou bidouillées
             $role_msg      = 'Données invalides.';
             $role_msg_type = 'error';
         }
     }
     ?>
 
+    <!-- topbar avec bonjour + boutons -->
     <header class="topbar">
         <div class="topbar-content">
             <div>
@@ -55,8 +58,10 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
             </div>
         </div>
     </header>
+
     <main class="container">
-        <!-- différente fonctions -->
+
+        <!-- 4 cartes de navigation rapide vers les sections -->
         <section class="dashboard-cards">
             <article class="card">
                 <h2>Utilisateurs</h2>
@@ -87,7 +92,8 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                 </div>
             </article>
         </section>
-        <!--liste utilisateurs-->
+
+        <!-- liste de tous les users enregistrés -->
         <section class="historique" id="liste-utilisateurs">
             <h2>Liste des utilisateurs</h2>
             <p>Voici les comptes enregistrés sur le site :</p>
@@ -104,6 +110,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                     <tbody>
                     <?php
                     try {
+                        // on récup tous les users, du plus récent au plus ancien
                         $stmt = $pdo->query('SELECT id, nom, email, role FROM users ORDER BY id DESC');
                         while ($user = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '<tr>';
@@ -122,11 +129,12 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
             </div>
         </section>
 
-        <!-- ===== HISTORIQUE LOGS ===== -->
+        <!-- historique des connexions (table logs) -->
         <section class="historique" id="historique-logs">
             <h2>Historique des logs</h2>
             <p>Connexions enregistrées sur le site, de la plus récente à la plus ancienne.</p>
             <div class="table-wrapper">
+                <!-- barre de recherche en temps réel + compteur d'entrées -->
                 <div class="logs-toolbar">
                     <input type="text" id="logs-search" placeholder="Rechercher un utilisateur…" class="logs-search-input">
                     <span id="logs-count" class="logs-count"></span>
@@ -143,12 +151,14 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                     <tbody>
                     <?php
                     try {
+                        // on limite à 200 entrées pour pas surcharger la page
                         $logs_stmt = $pdo->query('SELECT id, user_id, user_name, timestamp FROM logs ORDER BY timestamp DESC LIMIT 200');
                         $logs = $logs_stmt->fetchAll(PDO::FETCH_ASSOC);
                         if (empty($logs)) {
                             echo '<tr><td colspan="4" class="logs-empty">Aucun log enregistré pour le moment.</td></tr>';
                         } else {
                             foreach ($logs as $log) {
+                                // formatage de la date en heure Paris
                                 $dt        = new DateTime($log['timestamp'], new DateTimeZone('Europe/Paris'));
                                 $formatted = $dt->format('d/m/Y à H:i:s');
                                 echo '<tr>';
@@ -168,7 +178,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
             </div>
         </section>
 
-        <!-- ===== HISTORIQUE CASIERS ===== -->
+        <!-- historique des ouvertures de casiers via badge RFID -->
         <section class="historique" id="historique-casiers">
             <h2>Historique des ouvertures de casiers</h2>
             <p>Toutes les ouvertures enregistrées, de la plus récente à la plus ancienne.</p>
@@ -187,6 +197,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                     <tbody>
                     <?php
                     try {
+                        // idem, limite 200 pour les perfs
                         $casier_stmt = $pdo->query(
                             'SELECT id, user_name, badge_uid, site, casier, opened_at
                              FROM casier_logs
@@ -200,7 +211,8 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                             foreach ($casier_logs as $cl) {
                                 $dt  = new DateTime($cl['opened_at'], new DateTimeZone('Europe/Paris'));
                                 $fmt = $dt->format('d/m/Y à H:i:s');
-                                $uid = $cl['badge_uid'] ?? '—';
+                                // si pas de badge_uid on met un tiret
+                                $uid = isset($cl['badge_uid']) ? $cl['badge_uid'] : '—';
                                 echo '<tr>';
                                 echo '<td class="log-id">'  . htmlspecialchars($cl['id'],        ENT_QUOTES, 'UTF-8') . '</td>';
                                 echo '<td class="log-name"><span class="log-badge">' . htmlspecialchars($cl['user_name'], ENT_QUOTES, 'UTF-8') . '</span></td>';
@@ -220,18 +232,19 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
             </div>
         </section>
 
-        <!-- ===== PARAMÈTRES ===== -->
+        <!-- section paramètres : gestion des rôles + stats BDD -->
         <section class="historique" id="parametres">
             <h2>Paramètres</h2>
             <p>Gestion des rôles et informations sur la base de données.</p>
 
+            <!-- message de retour après changement de rôle -->
             <?php if ($role_msg): ?>
                 <div class="param-msg param-msg--<?php echo $role_msg_type; ?>">
                     <?php echo $role_msg; ?>
                 </div>
             <?php endif; ?>
 
-            <!-- Sous-section : Gestion des rôles -->
+            <!-- tableau pour modifier le rôle de chaque user -->
             <div class="param-block">
                 <h3 class="param-title">Gestion des rôles</h3>
                 <p class="param-desc">Modifiez le rôle de chaque utilisateur via le menu déroulant.</p>
@@ -249,12 +262,15 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                         <tbody>
                         <?php
                         try {
+                            // on liste tous les users par ID croissant
                             $stmt2 = $pdo->query('SELECT id, nom, email, role FROM users ORDER BY id ASC');
                             while ($u = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                                // échappement des valeurs pour l'affichage HTML
                                 $uid   = htmlspecialchars($u['id'],    ENT_QUOTES, 'UTF-8');
                                 $unom  = htmlspecialchars($u['nom'],   ENT_QUOTES, 'UTF-8');
                                 $umail = htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8');
                                 $urole = htmlspecialchars($u['role'],  ENT_QUOTES, 'UTF-8');
+                                // classe CSS du badge selon le rôle
                                 $badge_class = $u['role'] === 'admin' ? 'role-admin' : ($u['role'] === 'technicien' ? 'role-technicien' : 'role-user');
                                 echo '<tr>';
                                 echo '<td class="log-id">' . $uid . '</td>';
@@ -262,10 +278,12 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                                 echo '<td class="log-uid">' . $umail . '</td>';
                                 echo '<td><span class="role-badge ' . $badge_class . '">' . $urole . '</span></td>';
                                 echo '<td>';
+                                // petit form inline pour changer le rôle sans quitter la page
                                 echo '<form method="POST" action="#parametres" class="role-form">';
                                 echo '<input type="hidden" name="update_role" value="1">';
                                 echo '<input type="hidden" name="user_id" value="' . $uid . '">';
                                 echo '<select name="new_role" class="role-select">';
+                                // option sélectionnée selon le rôle actuel de l'user
                                 echo '<option value="user"'        . ($u['role'] === 'user'        ? ' selected' : '') . '>user</option>';
                                 echo '<option value="technicien"' . ($u['role'] === 'technicien' ? ' selected' : '') . '>technicien</option>';
                                 echo '<option value="admin"'      . ($u['role'] === 'admin'      ? ' selected' : '') . '>admin</option>';
@@ -284,7 +302,7 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                 </div>
             </div>
 
-            <!-- Sous-section : Stats BDD -->
+            <!-- stats de la BDD : tables, nb de lignes, moteur, etc. -->
             <div class="param-block">
                 <h3 class="param-title">Base de données</h3>
                 <p class="param-desc">Tables présentes et nombre d'enregistrements.</p>
@@ -302,7 +320,9 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                         <tbody>
                         <?php
                         try {
+                            // on récup le nom de la BDD courante
                             $db_name = $pdo->query('SELECT DATABASE()')->fetchColumn();
+                            // requête sur information_schema pour avoir les stats des tables
                             $tbl_stmt = $pdo->prepare(
                                 'SELECT TABLE_NAME, TABLE_ROWS, ENGINE, TABLE_COLLATION, UPDATE_TIME
                                  FROM information_schema.TABLES
@@ -315,11 +335,12 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
                                 echo '<tr><td colspan="5" class="logs-empty">Aucune table trouvée.</td></tr>';
                             } else {
                                 foreach ($tables as $tbl) {
+                                    // formatage de la date de dernière maj
                                     if (!empty($tbl['UPDATE_TIME'])) {
                                         $dt_upd = new DateTime($tbl['UPDATE_TIME'], new DateTimeZone('Europe/Paris'));
                                         $upd = $dt_upd->format('d/m/Y H:i');
                                     } else {
-                                        $upd = '—';
+                                        $upd = '—'; // pas de date dispo (table jamais modifiée)
                                     }
                                     $engine    = !empty($tbl['ENGINE'])          ? $tbl['ENGINE']          : '—';
                                     $collation = !empty($tbl['TABLE_COLLATION']) ? $tbl['TABLE_COLLATION'] : '—';
@@ -345,28 +366,32 @@ $username = isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_nam
     </main>
 
     <script>
-    // Filtrage en temps réel par nom d'utilisateur (logs)
+    // filtrage en temps réel des logs par nom d'user
     const searchInput = document.getElementById('logs-search');
     const logsCount   = document.getElementById('logs-count');
     const tbody       = document.querySelector('#logs-table tbody');
 
+    // met à jour le compteur d'entrées visibles
     function updateCount() {
         const visible = tbody.querySelectorAll('tr:not([style*="display: none"])').length;
         logsCount.textContent = visible + ' entrée' + (visible > 1 ? 's' : '');
     }
-    updateCount();
+    updateCount(); // appel initial au chargement
 
+    // à chaque frappe dans le champ de recherche, on filtre les lignes
     searchInput.addEventListener('input', function () {
         const q = this.value.toLowerCase().trim();
         tbody.querySelectorAll('tr').forEach(function (row) {
             const name = row.querySelector('.log-name');
             if (!name) return;
+            // on cache les lignes qui ne correspondent pas
             row.style.display = name.textContent.toLowerCase().includes(q) ? '' : 'none';
         });
         updateCount();
     });
     </script>
 
+    <!-- footer avec l'année automatique -->
     <footer class="footer">
         <p>&copy; <?php echo date('Y'); ?> SiteprojetEnzo - Espace Administrateur</p>
     </footer>

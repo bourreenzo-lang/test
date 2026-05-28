@@ -1,11 +1,11 @@
-/* ===== RESET ===== */
+/* reset de base, rien de spécial */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
+/* body centré, fond légèrement crème */
 body {
     font-family: 'Georgia', serif;
     min-height: 100vh;
@@ -17,7 +17,7 @@ body {
     color: #1a1a1a;
 }
 
-/* ===== BARRE DE NAVIGATION ===== */
+/* nav fixée en haut à droite avec le bouton accueil */
 .topnav {
     position: fixed;
     top: 0;
@@ -28,6 +28,7 @@ body {
     z-index: 100;
 }
 
+/* style des boutons dans la nav */
 .nav-btn {
     padding: 8px 16px;
     border: 1px solid #1a1a1a;
@@ -41,12 +42,13 @@ body {
     transition: background 0.2s, color 0.2s;
 }
 
+/* hover : inversé classique */
 .nav-btn:hover {
     background: #1a1a1a;
     color: white;
 }
 
-/* ===== TITRE ===== */
+/* titre "Connexion" au dessus du form */
 h1 {
     font-size: 1.8rem;
     font-weight: 400;
@@ -55,7 +57,7 @@ h1 {
     color: #1a1a1a;
 }
 
-/* ===== FORMULAIRE ===== */
+/* carte blanche qui contient le form */
 form {
     background: white;
     padding: 36px 32px;
@@ -64,12 +66,14 @@ form {
     border: 1px solid #e0e0de;
 }
 
+/* les champs en colonne avec un espace entre chaque */
 .formulaire {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
+/* style des inputs texte et mdp */
 .formulaire input {
     padding: 11px 14px;
     border: 1px solid #d0d0ce;
@@ -82,12 +86,13 @@ form {
     transition: border-color 0.2s;
 }
 
+/* quand l'input est actif : bordure noire */
 .formulaire input:focus {
     border-color: #1a1a1a;
     background: white;
 }
 
-/* ===== BOUTON SUBMIT ===== */
+/* bouton de soumission du form */
 .btn-primary,
 .formulaire input[type="submit"] {
     padding: 12px;
@@ -102,13 +107,14 @@ form {
     transition: background 0.2s, color 0.2s;
 }
 
+/* hover du bouton submit */
 .btn-primary:hover,
 .formulaire input[type="submit"]:hover {
     background: #1a1a1a;
     color: white;
 }
 
-/* ===== MESSAGE ERREUR ===== */
+/* msg d'erreur en rouge sous le titre */
 .erreur-msg {
     color: #9b2c2c;
     font-size: 0.88rem;

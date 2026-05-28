@@ -1,11 +1,11 @@
-/* ===== RESET ===== */
+/* reset basique */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
+/* body général de la page admin, pas centré (c'est un dashboard) */
 body {
     font-family: 'Georgia', serif;
     min-height: 100vh;
@@ -13,13 +13,14 @@ body {
     color: #1a1a1a;
 }
 
-/* ===== HEADER ===== */
+/* barre du haut blanche avec le nom de l'admin et les boutons */
 .topbar {
     background: white;
     border-bottom: 1px solid #e0e0de;
     padding: 20px 40px;
 }
 
+/* contenu de la topbar : titre à gauche, boutons à droite */
 .topbar-content {
     display: flex;
     align-items: center;
@@ -34,18 +35,20 @@ body {
     letter-spacing: 0.04em;
 }
 
+/* sous-titre gris sous le nom */
 .subtitle {
     color: #888;
     font-size: 0.88rem;
     margin-top: 3px;
 }
 
-/* ===== BOUTONS HEADER ===== */
+/* groupe des boutons accueil + déco dans la topbar */
 .actions {
     display: flex;
     gap: 10px;
 }
 
+/* bouton standard (accueil) */
 .btn {
     padding: 9px 18px;
     border: 1px solid #1a1a1a;
@@ -64,6 +67,7 @@ body {
     color: white;
 }
 
+/* bouton déconnexion en rouge */
 .btn-danger {
     border-color: #9b2c2c;
     color: #9b2c2c;
@@ -74,7 +78,7 @@ body {
     color: white;
 }
 
-/* ===== CONTENEUR ===== */
+/* conteneur principal centré avec une largeur max */
 .container {
     width: 90%;
     max-width: 1000px;
@@ -84,13 +88,14 @@ body {
     gap: 28px;
 }
 
-/* ===== CARDS ===== */
+/* grille des 4 cartes de raccourcis en haut du dashboard */
 .dashboard-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px;
 }
 
+/* une carte du dashboard */
 .card {
     background: white;
     border: 1px solid #e0e0de;
@@ -116,6 +121,7 @@ body {
     margin-top: 14px;
 }
 
+/* bouton "voir" dans les cartes */
 .btn-card {
     display: inline-block;
     padding: 8px 14px;
@@ -134,7 +140,7 @@ body {
     color: white;
 }
 
-/* ===== TABLE ===== */
+/* wrapper blanc autour des tableaux */
 .table-wrapper {
     background: white;
     border: 1px solid #e0e0de;
@@ -142,6 +148,7 @@ body {
     padding: 24px;
 }
 
+/* titres des sections (logs, casiers, etc.) */
 .historique h2 {
     font-size: 1.1rem;
     font-weight: 400;
@@ -155,12 +162,14 @@ body {
     margin-bottom: 16px;
 }
 
+/* style global des tableaux */
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.92rem;
 }
 
+/* en-têtes de colonnes en gris discret */
 th {
     background: #f9f9f7;
     color: #555;
@@ -173,21 +182,24 @@ th {
     text-align: left;
 }
 
+/* cellules classiques */
 td {
     padding: 11px 14px;
     border-bottom: 1px solid #f0f0ee;
     color: #333;
 }
 
+/* pas de bordure sur la dernière ligne */
 tr:last-child td {
     border-bottom: none;
 }
 
+/* hover léger sur les lignes du tableau */
 tr:hover td {
     background: #fafaf8;
 }
 
-/* ===== LOGS ===== */
+/* barre au dessus des logs : input de recherche + compteur */
 .logs-toolbar {
     display: flex;
     align-items: center;
@@ -197,6 +209,7 @@ tr:hover td {
     flex-wrap: wrap;
 }
 
+/* champ de recherche dans les logs */
 .logs-search-input {
     padding: 8px 12px;
     border: 1px solid #e0e0de;
@@ -215,6 +228,7 @@ tr:hover td {
     background: white;
 }
 
+/* petit compteur "X entrées" à droite de la barre */
 .logs-count {
     font-size: 0.82rem;
     color: #aaa;
@@ -222,6 +236,7 @@ tr:hover td {
     white-space: nowrap;
 }
 
+/* badge arrondi pour afficher le nom de l'user dans les logs */
 .log-badge {
     display: inline-block;
     padding: 2px 10px;
@@ -232,23 +247,27 @@ tr:hover td {
     letter-spacing: 0.02em;
 }
 
+/* colonne ID en gris clair */
 .log-id {
     color: #bbb;
     font-size: 0.82rem;
     width: 48px;
 }
 
+/* colonnes secondaires (uid, site, casier) en gris */
 .log-uid {
     color: #999;
     font-size: 0.85rem;
 }
 
+/* colonne horodatage */
 .log-time {
     color: #555;
     font-size: 0.85rem;
     white-space: nowrap;
 }
 
+/* message quand le tableau est vide */
 .logs-empty {
     text-align: center;
     color: #aaa;
@@ -256,7 +275,7 @@ tr:hover td {
     padding: 24px 0;
 }
 
-/* ===== PARAMÈTRES ===== */
+/* section paramètres */
 .param-block {
     margin-top: 28px;
 }
@@ -275,6 +294,7 @@ tr:hover td {
     margin-bottom: 14px;
 }
 
+/* notification après changement de rôle */
 .param-msg {
     padding: 10px 16px;
     border-radius: 4px;
@@ -282,18 +302,21 @@ tr:hover td {
     margin-bottom: 18px;
 }
 
+/* msg succès (vert) */
 .param-msg--success {
     background: #f0faf4;
     border: 1px solid #a3d9b1;
     color: #276749;
 }
 
+/* msg erreur (rouge) */
 .param-msg--error {
     background: #fff5f5;
     border: 1px solid #f5c6c6;
     color: #9b2c2c;
 }
 
+/* badge coloré qui montre le rôle dans le tableau */
 .role-badge {
     display: inline-block;
     padding: 2px 10px;
@@ -304,22 +327,32 @@ tr:hover td {
     text-transform: uppercase;
 }
 
+/* admin : fond noir */
 .role-admin {
     background: #1a1a1a;
     color: white;
 }
 
+/* user simple : fond gris clair */
 .role-user {
     background: #f0f0ee;
     color: #555;
 }
 
+/* technicien : à ajouter si besoin */
+.role-technicien {
+    background: #e8f0fe;
+    color: #1a56db;
+}
+
+/* le form inline de changement de rôle */
 .role-form {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
+/* select du rôle */
 .role-select {
     padding: 5px 8px;
     border: 1px solid #e0e0de;
@@ -336,6 +369,7 @@ tr:hover td {
     border-color: #1a1a1a;
 }
 
+/* bouton "Appliquer" pour changer le rôle */
 .btn-role {
     padding: 5px 12px;
     border: 1px solid #1a1a1a;
@@ -353,7 +387,7 @@ tr:hover td {
     color: white;
 }
 
-/* ===== FOOTER ===== */
+/* pied de page discret en bas */
 .footer {
     text-align: center;
     padding: 24px 0;

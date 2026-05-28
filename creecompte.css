@@ -1,11 +1,11 @@
-/* ===== RESET ===== */
+/* reset de base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* ===== BASE ===== */
+/* même base que connexion.css, fond clair centré */
 body {
     font-family: 'Georgia', serif;
     min-height: 100vh;
@@ -17,7 +17,7 @@ body {
     color: #1a1a1a;
 }
 
-/* ===== TITRE ===== */
+/* titre de la page */
 h1 {
     font-size: 1.8rem;
     font-weight: 400;
@@ -26,7 +26,7 @@ h1 {
     color: #1a1a1a;
 }
 
-/* ===== FORMULAIRE ===== */
+/* la carte blanche autour du form */
 form {
     background: white;
     padding: 36px 32px;
@@ -35,12 +35,14 @@ form {
     border: 1px solid #e0e0de;
 }
 
+/* champs en colonne */
 .formulaire {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
+/* style général des inputs (text, email, password) */
 .formulaire input {
     padding: 11px 14px;
     border: 1px solid #d0d0ce;
@@ -53,12 +55,13 @@ form {
     transition: border-color 0.2s;
 }
 
+/* focus : bordure noire */
 .formulaire input:focus {
     border-color: #1a1a1a;
     background: white;
 }
 
-/* ===== BOUTON SUBMIT ===== */
+/* bouton de soumission */
 .formulaire input[type="submit"] {
     padding: 12px;
     border: 1px solid #1a1a1a;
@@ -72,7 +75,46 @@ form {
     transition: background 0.2s, color 0.2s;
 }
 
+/* hover du submit : fond noir texte blanc */
 .formulaire input[type="submit"]:hover {
     background: #1a1a1a;
     color: white;
+}
+
+/* nav fixée en haut à droite */
+.topnav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 16px 24px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+}
+
+/* bouton nav */
+.nav-btn {
+    padding: 8px 16px;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Georgia', serif;
+    font-size: 0.88rem;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-btn:hover {
+    background: #1a1a1a;
+    color: white;
+}
+
+/* msg d'erreur rouge */
+.erreur-msg {
+    color: #9b2c2c;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+    text-align: center;
 }
